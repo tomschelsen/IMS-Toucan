@@ -35,11 +35,13 @@ class AlignerDataset(Dataset):
         if not os.path.exists(os.path.join(cache_dir, "aligner_train_cache.pt")) or rebuild_cache:
             if cut_silences:
                 torch.set_num_threads(1)
-                torch.hub.load(repo_or_dir='snakers4/silero-vad',
-                               model='silero_vad',
-                               force_reload=False,
-                               onnx=False,
-                               verbose=False)  # download and cache for it to be loaded and used later
+                torch.hub.load(repo_or_dir=os.path.join(MODELS_DIR, "VAD/snakers4_silero-vad_master"),
+	                            model='silero_vad',
+	                            source='local',
+	                            trust_repo=True,
+	                            force_reload=False,
+	                            onnx=False,
+	                            verbose=False)  # download and cache for it to be loaded and used later
                 torch.set_grad_enabled(True)
             resource_manager = Manager()
             self.path_to_transcript_dict = resource_manager.dict(path_to_transcript_dict)

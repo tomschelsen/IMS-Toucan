@@ -34,11 +34,13 @@ class UtteranceCloner:
         self.aligner_weights = torch.load(acoustic_checkpoint_path, map_location='cpu')["asr_model"]
         torch.hub._validate_not_a_forked_repo = lambda a, b, c: True  # torch 1.9 has a bug in the hub loading, this is a workaround
         # careful: assumes 16kHz or 8kHz audio
-        self.silero_model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
-                                                  model='silero_vad',
-                                                  force_reload=False,
-                                                  onnx=False,
-                                                  verbose=False)
+        self.silero_model, utils = torch.hub.load(repo_or_dir=os.path.join(MODELS_DIR, "VAD/snakers4_silero-vad_master"),
+	                                            model='silero_vad',
+	                                            source='local',
+	                                            trust_repo=True,
+	                                            force_reload=False,
+	                                            onnx=False,
+	                                            verbose=False)
         (self.get_speech_timestamps, _, _, _, _) = utils
         torch.set_grad_enabled(True)  # finding this issue was very infuriating: silero sets
         # this to false globally during model loading rather than using inference_mode or no_grad

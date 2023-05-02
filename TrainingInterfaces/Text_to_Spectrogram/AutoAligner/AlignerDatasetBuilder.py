@@ -33,11 +33,13 @@ class AlignerDatasetBuilder(Dataset):
                  allow_unknown_symbols=False):
         if cut_silences:
             torch.set_num_threads(1)
-            torch.hub.load(repo_or_dir='snakers4/silero-vad',
-                           model='silero_vad',
-                           force_reload=False,
-                           onnx=False,
-                           verbose=False)  # download and cache for it to be loaded and used later
+            torch.hub.load(repo_or_dir=os.path.join(MODELS_DIR, "VAD/snakers4_silero-vad_master"),
+	                                            model='silero_vad',
+	                                            source='local',
+	                                            trust_repo=True,
+	                                            force_reload=False,
+	                                            onnx=False,
+	                                            verbose=False)
             torch.set_grad_enabled(True)
         self.resource_manager = Manager()
         self.speaker_embeddings = list()

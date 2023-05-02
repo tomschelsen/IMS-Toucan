@@ -10,11 +10,13 @@ from Utility.path_to_transcript_dicts import *
 def make_sielce_cleaned_versions(train_sets):
     torch.hub._validate_not_a_forked_repo = lambda a, b, c: True  # torch 1.9 has a bug in the hub loading, this is a workaround
     # careful: assumes 16kHz or 8kHz audio
-    silero_model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
-                                         model='silero_vad',
-                                         force_reload=False,
-                                         onnx=False,
-                                         verbose=False)
+    silero_model, utils = torch.hub.load(repo_or_dir=os.path.join(MODELS_DIR, "VAD/snakers4_silero-vad_master"),
+	                                    model='silero_vad',
+	                                    source='local',
+	                                    trust_repo=True,
+	                                    force_reload=False,
+	                                    onnx=False,
+	                                    verbose=False)
     (get_speech_timestamps,
      save_audio,
      read_audio,
